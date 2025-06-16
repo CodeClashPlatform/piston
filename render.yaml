@@ -2,32 +2,31 @@ services:
   - type: web
     name: piston-api
     env: docker
+    plan: standard
     dockerfilePath: ./api/Dockerfile
     dockerContext: ./api
-    privileged: true
     envVars:
       - key: PISTON_LOG_LEVEL
         value: INFO
       - key: PISTON_BIND_ADDRESS
         value: 0.0.0.0:$PORT
-      - key: PISTON_DATA_DIRECTORY
-        value: /piston
+      - key: PISTON_DATA_DIRECTORY 
+        value: /tmp/piston
       - key: PISTON_DISABLE_NETWORKING
-        value: "true"
+        value: true
       - key: PISTON_MAX_PROCESS_COUNT
-        value: "64"
-      - key: PISTON_MAX_FILE_SIZE
-        value: "10000000"
+        value: 64
+      - key: PISTON_MAX_FILE_SIZE 
+        value: 10000000
       - key: PISTON_OUTPUT_MAX_SIZE
-        value: "1024"
+        value: 1024
       - key: PISTON_MAX_CONCURRENT_JOBS
-        value: "64"
+        value: 64
       - key: PISTON_RUN_TIMEOUT
-        value: "3000"
-      - key: PISTON_COMPILE_TIMEOUT
-        value: "10000"
-    scaling:
-      minInstances: 1
-      maxInstances: 3
-      targetMemoryPercent: 80
-    healthCheckPath: /api/v2/runtimes
+        value: 3000
+      - key: PISTON_COMPILE_TIMEOUT 
+        value: 10000
+    disk:
+      name: data
+      mountPath: /tmp
+      sizeGB: 1
