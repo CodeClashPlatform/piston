@@ -9,7 +9,10 @@ services:
       - key: PISTON_LOG_LEVEL
         value: INFO
       - key: PISTON_BIND_ADDRESS
-        value: 0.0.0.0:$PORT
+        sync: false
+        value: "0.0.0.0:80"
+      - key: PORT
+        value: "80"
       - key: PISTON_DATA_DIRECTORY 
         value: /piston
       - key: PISTON_DISABLE_NETWORKING
