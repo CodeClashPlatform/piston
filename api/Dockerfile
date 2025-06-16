@@ -3,7 +3,7 @@ FROM ghcr.io/engineer-man/piston
 WORKDIR /piston_api
 
 # Copy CLI and package files first
-COPY cli ./cli
+COPY ../cli ./cli
 COPY package*.json ./
 
 # Install dependencies and CLI globally
