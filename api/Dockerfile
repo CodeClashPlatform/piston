@@ -30,18 +30,12 @@ WORKDIR /piston_api
 COPY ["package.json", "package-lock.json", "./"]
 RUN npm install
 
-# Create cli directory and install ppman
-RUN mkdir -p /piston_api/cli && \
-    npm install -g @piston/cli
-
 # Copy source files
 COPY ./src ./src
 
 # Make scripts executable
-COPY ./src/install-runtimes.sh /piston_api/src/
 COPY ./src/docker-entrypoint.sh /piston_api/src/
-RUN chmod +x /piston_api/src/docker-entrypoint.sh && \
-    chmod +x /piston_api/src/install-runtimes.sh
+RUN chmod +x /piston_api/src/docker-entrypoint.sh
 
 EXPOSE 80
 CMD ["/piston_api/src/docker-entrypoint.sh"]
