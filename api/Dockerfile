@@ -4,8 +4,9 @@ FROM ghcr.io/engineer-man/piston
 WORKDIR /piston_api
 COPY . .
 
-# Install dependencies
-RUN npm install
+# Install dependencies and CLI
+RUN npm install && \
+    npm install -g piston-cli
 
 # Setup scripts
 COPY src/install-runtimes.sh src/

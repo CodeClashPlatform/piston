@@ -9,22 +9,27 @@ services:
     healthCheckPath: /api/v2/runtimes
     envVars:
       - key: PISTON_BIND_ADDRESS
-        value: "0.0.0.0:2000" 
+        value: "0.0.0.0:$PORT" 
       - key: PISTON_DATA_DIRECTORY
         value: /piston
       - key: PISTON_LOG_LEVEL
         value: INFO
       - key: PISTON_MAX_CONCURRENT_JOBS
-        value: 64
+        value: "64"
       - key: PISTON_DISABLE_NETWORKING
         value: "true"
       - key: PISTON_OUTPUT_MAX_SIZE  
-        value: 1024
+        value: "1024"
 
     disk:
       name: piston-data
       mountPath: /piston
       sizeGB: 10
+
+    buildCommand: |
+      npm install -g piston-cli
+      mkdir -p /piston/packages
+      chmod 755 /piston/packages
 
   - type: web
     name: piston-cli
