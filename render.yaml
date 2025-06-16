@@ -9,27 +9,26 @@ services:
       - key: PISTON_LOG_LEVEL
         value: INFO
       - key: PISTON_BIND_ADDRESS
-        sync: false
         value: "0.0.0.0:80"
       - key: PORT
         value: "80"
       - key: PISTON_DATA_DIRECTORY 
         value: /piston
       - key: PISTON_DISABLE_NETWORKING
-        value: true
+        value: "true"
       - key: PISTON_MAX_PROCESS_COUNT
-        value: 64
-      - key: PISTON_MAX_FILE_SIZE 
-        value: 10000000
+        value: "64"
+      - key: PISTON_MAX_FILE_SIZE
+        value: "10000000"
       - key: PISTON_OUTPUT_MAX_SIZE
-        value: 1024
+        value: "1024"
       - key: PISTON_MAX_CONCURRENT_JOBS
-        value: 64
+        value: "64"
       - key: PISTON_RUN_TIMEOUT
-        value: 3000
-      - key: PISTON_COMPILE_TIMEOUT 
-        value: 10000
+        value: "3000"
+      - key: PISTON_COMPILE_TIMEOUT
+        value: "10000"
     disk:
-      name: data
+      name: piston-data
       mountPath: /piston
-      sizeGB: 10
+      sizeGB: 20

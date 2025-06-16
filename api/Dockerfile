@@ -13,36 +13,30 @@ FROM node:15.10.0-buster-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN dpkg-reconfigure -p critical dash
+# Install required packages
 RUN apt-get update && \
     apt-get install -y libxml2 gnupg tar coreutils util-linux libc6-dev \
-    binutils build-essential locales libpcre3-dev libevent-dev libgmp3-dev \
-    libncurses6 libncurses5 libedit-dev libseccomp-dev rename procps python3 \
-    libreadline-dev libblas-dev liblapack-dev libpcre3-dev libarpack2-dev \
-    libfftw3-dev libglpk-dev libqhull-dev libqrupdate-dev libsuitesparse-dev \
-    libsundials-dev libpcre2-dev libcap-dev && \
+    binutils build-essential locales libpcre3-dev python3 curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Create required directories with proper permissions
-RUN mkdir -p /var/local/lib/isolate && \
-    mkdir -p /usr/local/etc/isolate && \
+# Setup directories and permissions
+RUN mkdir -p /piston && \
     mkdir -p /piston_api && \
-    useradd -M piston && \
-    chown -R piston:piston /var/local/lib/isolate
+    useradd -m piston && \
+    chown -R piston:piston /piston
 
-COPY --from=isolate /usr/local/bin/isolate /usr/local/bin
-COPY --from=isolate /usr/local/etc/isolate /usr/local/etc/isolate
-
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
-
+# Copy files
 WORKDIR /piston_api
 COPY ["package.json", "package-lock.json", "./"]
 RUN npm install
 COPY ./src ./src
+COPY ./cli ./cli
 
-# Ensure proper permissions for entrypoint script
+# Make scripts executable
+COPY ./src/install-runtimes.sh /piston_api/src/
 COPY ./src/docker-entrypoint.sh /piston_api/src/
-RUN chmod +x /piston_api/src/docker-entrypoint.sh
+RUN chmod +x /piston_api/src/docker-entrypoint.sh && \
+    chmod +x /piston_api/src/install-runtimes.sh
 
+EXPOSE 80
 CMD ["/piston_api/src/docker-entrypoint.sh"]
-EXPOSE 2000/tcp
