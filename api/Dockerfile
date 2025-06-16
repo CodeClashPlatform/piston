@@ -29,8 +29,13 @@ RUN mkdir -p /piston && \
 WORKDIR /piston_api
 COPY ["package.json", "package-lock.json", "./"]
 RUN npm install
+
+# Create cli directory and install ppman
+RUN mkdir -p /piston_api/cli && \
+    npm install -g @piston/cli
+
+# Copy source files
 COPY ./src ./src
-COPY ./cli ./cli
 
 # Make scripts executable
 COPY ./src/install-runtimes.sh /piston_api/src/
