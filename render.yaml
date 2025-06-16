@@ -27,7 +27,9 @@ services:
       sizeGB: 10
 
     buildCommand: |
-      npm install -g piston-cli
+      cd /piston_api
+      npm install
+      npm link cli
       mkdir -p /piston/packages
       chmod 755 /piston/packages
 

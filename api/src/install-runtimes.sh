@@ -11,18 +11,19 @@ log "Starting runtime installations..."
 mkdir -p /piston/packages
 chmod 755 /piston/packages
 
-# Set NODE_PATH for CLI
+# Set paths
+export PATH="/piston_api/cli:$PATH"
 export NODE_PATH=/usr/local/lib/node_modules
 
-# Install core runtimes using global CLI
+# Install core runtimes using CLI directly
 log "Installing Python runtime..."
-piston-cli ppman install python=3.9.4
+node /piston_api/cli/index.js ppman install python=3.9.4
 
 log "Installing Node.js runtime..."
-piston-cli ppman install nodejs=16.14.0
+node /piston_api/cli/index.js ppman install nodejs=16.14.0
 
 log "Installing Java runtime..."
-piston-cli ppman install java=17.0.2
+node /piston_api/cli/index.js ppman install java=17.0.2
 
 # Set proper permissions
 log "Setting permissions..."
@@ -31,4 +32,4 @@ chmod -R 755 /piston/packages
 
 log "Runtime installations completed"
 log "Installed runtimes:"
-piston-cli ppman list
+node /piston_api/cli/index.js ppman list
