@@ -11,7 +11,7 @@ services:
       - key: PISTON_BIND_ADDRESS
         value: 0.0.0.0:$PORT
       - key: PISTON_DATA_DIRECTORY 
-        value: /tmp/piston
+        value: /piston
       - key: PISTON_DISABLE_NETWORKING
         value: true
       - key: PISTON_MAX_PROCESS_COUNT
@@ -28,5 +28,5 @@ services:
         value: 10000
     disk:
       name: data
-      mountPath: /tmp
-      sizeGB: 1
+      mountPath: /piston
+      sizeGB: 10

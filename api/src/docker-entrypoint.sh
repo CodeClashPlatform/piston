@@ -2,7 +2,7 @@
 
 # Set up required directories
 CGROUP_FS="/tmp/cgroup"
-PISTON_DIR="/tmp/piston"
+PISTON_DIR="/piston"
 
 # Create necessary directories
 mkdir -p $CGROUP_FS
