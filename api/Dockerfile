@@ -2,6 +2,7 @@ FROM buildpack-deps:buster AS isolate
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git libcap-dev && \
     rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /tmp/isolate && \
     git clone https://github.com/envicutor/isolate.git /tmp/isolate/ && \
     cd /tmp/isolate && \
     git checkout af6db68042c3aa0ded80787fbb78bc0846ea2114 && \
@@ -21,7 +22,14 @@ RUN apt-get update && \
     libfftw3-dev libglpk-dev libqhull-dev libqrupdate-dev libsuitesparse-dev \
     libsundials-dev libpcre2-dev libcap-dev && \
     rm -rf /var/lib/apt/lists/*
-RUN useradd -M piston
+
+# Create required directories with proper permissions
+RUN mkdir -p /var/local/lib/isolate && \
+    mkdir -p /usr/local/etc/isolate && \
+    mkdir -p /piston_api && \
+    useradd -M piston && \
+    chown -R piston:piston /var/local/lib/isolate
+
 COPY --from=isolate /usr/local/bin/isolate /usr/local/bin
 COPY --from=isolate /usr/local/etc/isolate /usr/local/etc/isolate
 
@@ -31,6 +39,10 @@ WORKDIR /piston_api
 COPY ["package.json", "package-lock.json", "./"]
 RUN npm install
 COPY ./src ./src
+
+# Ensure proper permissions for entrypoint script
+COPY ./src/docker-entrypoint.sh /piston_api/src/
+RUN chmod +x /piston_api/src/docker-entrypoint.sh
 
 CMD ["/piston_api/src/docker-entrypoint.sh"]
 EXPOSE 2000/tcp
