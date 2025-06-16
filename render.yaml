@@ -6,31 +6,34 @@ services:
     dockerContext: ./api
     plan: standard
     branch: main
-    numInstances: 1
-    healthCheckPath: /
+    healthCheckPath: /api/v2/runtimes
     envVars:
-      - key: PORT
-        value: 2000
-      - key: PISTON_LOG_LEVEL
-        value: INFO
-      - key: PISTON_BIND_ADDRESS 
-        value: "0.0.0.0:2000"
+      - key: PISTON_BIND_ADDRESS
+        value: "0.0.0.0:2000" 
       - key: PISTON_DATA_DIRECTORY
         value: /piston
+      - key: PISTON_LOG_LEVEL
+        value: INFO
       - key: PISTON_MAX_CONCURRENT_JOBS
-        value: "64"
+        value: 64
       - key: PISTON_DISABLE_NETWORKING
         value: "true"
+      - key: PISTON_OUTPUT_MAX_SIZE  
+        value: 1024
 
-  - type: web 
+    disk:
+      name: piston-data
+      mountPath: /piston
+      sizeGB: 10
+
+  - type: web
     name: piston-cli
     env: node
     buildCommand: cd cli && npm install
-    startCommand: cd cli && node index.js
+    startCommand: node cli/index.js
     plan: free
-    branch: main
     envVars:
-      - key: PISTON_URL
+      - key: PISTON_URL 
         fromService:
           name: piston-api
           type: web
