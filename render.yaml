@@ -2,7 +2,7 @@ services:
   - type: web
     name: piston-api
     env: docker
-    dockerfilePath: ./api/Dockerfile
+    dockerfilePath: Dockerfile
     dockerContext: .
     plan: standard
     branch: main
@@ -27,8 +27,6 @@ services:
       sizeGB: 10
 
     buildCommand: |
-      pwd
-      ls -la
       npm install
       npm install -g ./cli
       mkdir -p /piston/packages
